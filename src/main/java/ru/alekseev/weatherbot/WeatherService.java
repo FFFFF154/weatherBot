@@ -25,7 +25,7 @@ public class WeatherService {
         this.webClientDaily = webClientDaily;
     }
 
-    public String getCurrentWeatherResponse() { //TODO Обработка строки
+    public String getCurrentWeatherResponse() {
         try {
             String data = webClientCurrent.get()
                     .retrieve()
@@ -43,13 +43,13 @@ public class WeatherService {
         return null;
     }
 
-    public String getDailyWeatherResponse() {//TODO Обработка строки
+    public String getDailyWeatherResponse() {
         try {
             String data = webClientDaily.get()
                     .retrieve()
                     .bodyToMono(String.class)
                     .block();
-            WeatherDTO weatherDTO = objectMapper.readValue(data, WeatherDTO.class); //TODO убрать лишние элементы в массиве по времени
+            WeatherDTO weatherDTO = objectMapper.readValue(data, WeatherDTO.class);
             StringBuilder response = new StringBuilder(weatherDTO.city().name() + "\n" +
                     "Sunrise: " + getTimeFromUnix(weatherDTO.city().sunrise()) + "\n" +
                     "Sunset: " + getTimeFromUnix(weatherDTO.city().sunset()) + "\n" + "\n");

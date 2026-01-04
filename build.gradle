@@ -4,8 +4,9 @@ plugins {
     id 'io.spring.dependency-management' version '1.1.7'
 }
 
+
 group = 'ru.alekseev'
-version = '0.0.1-SNAPSHOT'
+version = '1.0-SNAPSHOT'
 description = 'weatherBot'
 
 java {
@@ -39,4 +40,15 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+tasks.bootJar {
+    enabled = true
+    archiveFileName.set("${project.name}-${project.version}.jar")
+
+}
+
+
+tasks.jar {
+    enabled = false // Отключаем обычный JAR
 }
