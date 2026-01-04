@@ -43,7 +43,7 @@ public class WeatherService {
         return null;
     }
 
-    public String getDailyWeatherResponse() { // Просто комментарий
+    public String getDailyWeatherResponse() {
         try {
             String data = webClientDaily.get()
                     .retrieve()
