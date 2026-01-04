@@ -1,0 +1,7 @@
+spring:
+  application:
+  name: weatherBot
+bot:
+  token: 8447652739:AAHi2YqlG1GWaw1Inh69P5vsNdFFSPWAb4U
+weather:
+  key: c74e9ef93e23e98e52894df37e9cc14f
