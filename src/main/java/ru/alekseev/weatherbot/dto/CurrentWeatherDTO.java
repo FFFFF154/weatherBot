@@ -1,4 +1,4 @@
-package ru.alekseev.weatherbot;
+package ru.alekseev.weatherbot.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

@@ -1,11 +1,14 @@
-package ru.alekseev.weatherbot;
+package ru.alekseev.weatherbot.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import ru.alekseev.weatherbot.config.WebClientConfig;
+import ru.alekseev.weatherbot.dto.CurrentWeatherDTO;
+import ru.alekseev.weatherbot.dto.WeatherDTO;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -15,18 +18,22 @@ import java.util.List;
 @Service
 public class WeatherService {
 
+    private final ApplicationContext context;
     private final WebClient webClientCurrent;
     private final WebClient webClientDaily;
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
-    public WeatherService(WebClient webClientCurrent, WebClient webClientDaily) {
+    public WeatherService(WebClient webClientCurrent, WebClient webClientDaily, ApplicationContext context) {
         this.webClientCurrent = webClientCurrent;
         this.webClientDaily = webClientDaily;
+        this.context = context;
     }
 
     public String getCurrentWeatherResponse() {
         try {
+            WebClient webClientCurrent = context.getBean(WebClientConfig.class)
+                    .webClientCurrent();
             String data = webClientCurrent.get()
                     .retrieve()
                     .bodyToMono(String.class)
@@ -45,6 +52,8 @@ public class WeatherService {
 
     public String getDailyWeatherResponse() {
         try {
+            WebClient webClientDaily = context.getBean(WebClientConfig.class)
+                    .webClientDaily();
             String data = webClientDaily.get()
                     .retrieve()
                     .bodyToMono(String.class)

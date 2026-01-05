@@ -1,4 +1,4 @@
-package ru.alekseev.weatherbot;
+package ru.alekseev.weatherbot.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +8,7 @@ import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
+import ru.alekseev.weatherbot.config.BotProperties;
 
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;

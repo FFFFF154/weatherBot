@@ -3,8 +3,8 @@ package ru.alekseev.weatherbot.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 import org.springframework.web.reactive.function.client.WebClient;
-import ru.alekseev.weatherbot.WeatherProperties;
 
 @Configuration
 public class WebClientConfig {
@@ -17,6 +17,7 @@ public class WebClientConfig {
     }
 
     @Bean
+    @Scope("prototype")
     public WebClient webClientCurrent() {
         return WebClient.builder()
                 .baseUrl(weatherProperties.getCurrentWeatherUrl())
@@ -24,6 +25,7 @@ public class WebClientConfig {
     }
 
     @Bean
+    @Scope("prototype")
     public WebClient webClientDaily(){
         return WebClient.builder()
                 .baseUrl(weatherProperties.getDailyWeatherUrl())

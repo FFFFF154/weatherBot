@@ -1,4 +1,4 @@
-package ru.alekseev.weatherbot;
+package ru.alekseev.weatherbot.bot;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -6,7 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.longpolling.interfaces.LongPollingUpdateConsumer;
 import org.telegram.telegrambots.longpolling.starter.SpringLongPollingBot;
-import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.alekseev.weatherbot.consumer.UpdateConsumer;
+import ru.alekseev.weatherbot.config.BotProperties;
 
 @Component
 @Slf4j

@@ -1,4 +1,4 @@
-package ru.alekseev.weatherbot;
+package ru.alekseev.weatherbot.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
