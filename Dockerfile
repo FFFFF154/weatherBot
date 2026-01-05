@@ -1,3 +1,8 @@
+FROM eclipse-temurin:21-jdk-alpine AS builder
+WORKDIR /app
+COPY . .
+RUN chmod +x gradlew && ./gradlew clean bootJar
+
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
