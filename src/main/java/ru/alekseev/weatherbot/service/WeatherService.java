@@ -23,6 +23,8 @@ public class WeatherService {
     private final WebClient webClientDaily;
     private ObjectMapper objectMapper = new ObjectMapper();
 
+    private Integer utc = 3;
+
     @Autowired
     public WeatherService(WebClient webClientCurrent, WebClient webClientDaily, ApplicationContext context) {
         this.webClientCurrent = webClientCurrent;
@@ -81,11 +83,15 @@ public class WeatherService {
         Instant instant = Instant.ofEpochSecond(timestamp);
         ZonedDateTime zonedDateTime = instant.atZone(ZoneId.systemDefault());
 
-        return String.format("%02d:%02d", zonedDateTime.getHour(), zonedDateTime.getMinute());
+        return String.format("%02d:%02d", (zonedDateTime.getHour() + utc), zonedDateTime.getMinute());
     }
 
     private String getCelsiusTemperature(Double temperature) {
         return String.format("%.2f", temperature - 273.15);
+    }
+
+    public void setUtc(Integer utc) {
+        this.utc = utc;
     }
 
 }

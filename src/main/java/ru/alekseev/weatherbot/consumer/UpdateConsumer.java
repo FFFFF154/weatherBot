@@ -106,14 +106,17 @@ public class UpdateConsumer implements LongPollingSingleThreadUpdateConsumer {
                 break;
             case KOROLEV:
                 weatherProperties.setCoordinates("55.92", "37.82");
+                weatherService.setUtc(3);
                 setCity(chatId, KOROLEV);
                 break;
             case MOSCOW:
                 weatherProperties.setCoordinates("55.75", "37.62");
+                weatherService.setUtc(3);
                 setCity(chatId, MOSCOW);
                 break;
             case IZHEVSK:
                 weatherProperties.setCoordinates("56.85", "53.2");
+                weatherService.setUtc(4);
                 setCity(chatId, IZHEVSK);
                 break;
             default:
