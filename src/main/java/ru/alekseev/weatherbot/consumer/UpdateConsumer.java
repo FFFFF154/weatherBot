@@ -21,7 +21,7 @@ import java.util.List;
 public class UpdateConsumer implements LongPollingSingleThreadUpdateConsumer {
 
     private static final String START_MESSAGE = "Привет, я - бот погоды.\n" +
-            "Пока что я показываю актуальную погоду в Королёве.\n" +
+            "Я показываю актуальную погоду.\n" +
             "Выберете действие: ";
     private static final String MESSAGE_ERROR = "Неправильная команда";
     private static final String CHANGE_CITY_MESSAGE = "Выберете город";

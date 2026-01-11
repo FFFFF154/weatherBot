@@ -2,6 +2,7 @@ package ru.alekseev.weatherbot.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ public class WeatherService {
     private final WebClient webClientDaily;
     private ObjectMapper objectMapper = new ObjectMapper();
 
+    @Setter
     private Integer utc = 3;
 
     @Autowired
@@ -83,15 +85,13 @@ public class WeatherService {
         Instant instant = Instant.ofEpochSecond(timestamp);
         ZonedDateTime zonedDateTime = instant.atZone(ZoneId.systemDefault());
 
-        return String.format("%02d:%02d", (zonedDateTime.getHour() + utc), zonedDateTime.getMinute());
+        return String.format("%02d:%02d", ((zonedDateTime.getHour() + utc) >= 24 ? ((zonedDateTime.getHour() + utc) - 24) : (zonedDateTime.getHour() + utc)),
+                zonedDateTime.getMinute());
     }
 
     private String getCelsiusTemperature(Double temperature) {
         return String.format("%.2f", temperature - 273.15);
     }
 
-    public void setUtc(Integer utc) {
-        this.utc = utc;
-    }
 
 }
