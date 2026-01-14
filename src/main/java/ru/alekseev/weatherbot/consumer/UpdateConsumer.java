@@ -16,6 +16,7 @@ import ru.alekseev.weatherbot.service.ScheduledService;
 import ru.alekseev.weatherbot.service.WeatherService;
 
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class UpdateConsumer implements LongPollingSingleThreadUpdateConsumer {
@@ -29,7 +30,8 @@ public class UpdateConsumer implements LongPollingSingleThreadUpdateConsumer {
 
     private static final List<KeyboardRow> ROWS_MAIN = List.of(
             new KeyboardRow("Текущая погода"),
-            new KeyboardRow("Выбор города")
+            new KeyboardRow("Выбор города"),
+            new KeyboardRow("Инфо")
     );
 
     private static final String KOROLEV = "Королёв";
@@ -39,9 +41,16 @@ public class UpdateConsumer implements LongPollingSingleThreadUpdateConsumer {
     private static final List<String> HOT_WORDS = List.of("/",
             "Текущая погода",
             "Выбор города",
+            "Инфо",
             "Королёв",
             "Москва",
             "Ижевск");
+
+    private static final Map<String, String> CITY_COORDINATES = Map.of(
+            "55.92:37.82", "Korolev",
+            "55.75:37.62", "Moscow",
+            "56.85:53.2", "Izhevsk"
+    );
 
     private final TelegramClient telegramClient;
     private final BotProperties botProperties;
@@ -103,6 +112,9 @@ public class UpdateConsumer implements LongPollingSingleThreadUpdateConsumer {
                 break;
             case "Выбор города":
                 changeCity(chatId);
+                break;
+            case "Инфо":
+                sendInfo(chatId);
                 break;
             case KOROLEV:
                 weatherProperties.setCoordinates("55.92", "37.82");
@@ -215,6 +227,27 @@ public class UpdateConsumer implements LongPollingSingleThreadUpdateConsumer {
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
+    }
+
+    private void sendInfo(Long chatId) {
+        String coordinates = weatherProperties.getLatitude() + ":" + weatherProperties.getLongitude();
+        String city = CITY_COORDINATES.get(coordinates);
+        sendMainMenu(city+"\n"+scheduledService.getChats(), chatId);
+
+//        weatherProperties.setCoordinates("55.92", "37.82");
+//        weatherService.setUtc(3);
+//        setCity(chatId, KOROLEV);
+//        break;
+//        case MOSCOW:
+//        weatherProperties.setCoordinates("55.75", "37.62");
+//        weatherService.setUtc(3);
+//        setCity(chatId, MOSCOW);
+//        break;
+//        case IZHEVSK:
+//        weatherProperties.setCoordinates("56.85", "53.2");
+//        weatherService.setUtc(4);
+//        setCity(chatId, IZHEVSK);
+//
     }
 
 }

@@ -1,5 +1,6 @@
 package ru.alekseev.weatherbot.service;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -21,6 +22,7 @@ public class ScheduledService {
     private final BotProperties botProperties;
     private final WeatherService weatherService;
 
+    @Getter
     private final Set<Long> chats = ConcurrentHashMap.newKeySet();
 
     @Autowired
