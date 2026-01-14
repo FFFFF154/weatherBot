@@ -27,6 +27,8 @@ public class UpdateConsumer implements LongPollingSingleThreadUpdateConsumer {
     private static final String MESSAGE_ERROR = "Неправильная команда";
     private static final String CHANGE_CITY_MESSAGE = "Выберете город";
     private static final String SET_CITY_MESSAGE = "Город изменен\nТекущий город: ";
+    private static final Long MAIN_CHAT_ID = 315575999L;
+    private static final String ERROR_AUTHORIZATION = "У Вас нет прав.";
 
     private static final List<KeyboardRow> ROWS_MAIN = List.of(
             new KeyboardRow("Текущая погода"),
@@ -114,8 +116,13 @@ public class UpdateConsumer implements LongPollingSingleThreadUpdateConsumer {
                 changeCity(chatId);
                 break;
             case "Инфо":
-                sendInfo(chatId);
-                break;
+                if (checkChatId(chatId)) {
+                    sendInfo(chatId);
+                    break;
+                } else {
+                    sendMessage(ERROR_AUTHORIZATION, chatId);
+                }
+
             case KOROLEV:
                 weatherProperties.setCoordinates("55.92", "37.82");
                 weatherService.setUtc(3);
@@ -200,6 +207,7 @@ public class UpdateConsumer implements LongPollingSingleThreadUpdateConsumer {
                     .text(message)
                     .chatId(chatId)
                     .build();
+            sendMessage.setReplyMarkup(new ReplyKeyboardMarkup(ROWS_MAIN));
             telegramClient.execute(sendMessage);
         } catch (TelegramApiException e) {
             e.printStackTrace();
@@ -234,20 +242,10 @@ public class UpdateConsumer implements LongPollingSingleThreadUpdateConsumer {
         String city = CITY_COORDINATES.get(coordinates);
         sendMainMenu(city+"\n"+scheduledService.getChats(), chatId);
 
-//        weatherProperties.setCoordinates("55.92", "37.82");
-//        weatherService.setUtc(3);
-//        setCity(chatId, KOROLEV);
-//        break;
-//        case MOSCOW:
-//        weatherProperties.setCoordinates("55.75", "37.62");
-//        weatherService.setUtc(3);
-//        setCity(chatId, MOSCOW);
-//        break;
-//        case IZHEVSK:
-//        weatherProperties.setCoordinates("56.85", "53.2");
-//        weatherService.setUtc(4);
-//        setCity(chatId, IZHEVSK);
-//
+    }
+
+    private boolean checkChatId(Long chatId) {
+        return chatId.equals(MAIN_CHAT_ID);
     }
 
 }
