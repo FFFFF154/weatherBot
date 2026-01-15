@@ -35,6 +35,10 @@ public class UpdateConsumer implements LongPollingSingleThreadUpdateConsumer {
             new KeyboardRow("Выбор города"),
             new KeyboardRow("Инфо")
     );
+    private static final List<KeyboardRow> ROWS_MAIN_WITHOUT_INFO = List.of(
+            new KeyboardRow("Текущая погода"),
+            new KeyboardRow("Выбор города")
+    );
 
     private static final String KOROLEV = "Королёв";
     private static final String MOSCOW = "Москва";
@@ -116,7 +120,7 @@ public class UpdateConsumer implements LongPollingSingleThreadUpdateConsumer {
                 changeCity(chatId);
                 break;
             case "Инфо":
-                if (checkChatId(chatId)) {
+                if (isMainChatId(chatId)) {
                     sendInfo(chatId);
                     break;
                 } else {
@@ -124,16 +128,19 @@ public class UpdateConsumer implements LongPollingSingleThreadUpdateConsumer {
                 }
 
             case KOROLEV:
+                //scheduledService.changePersonCity(chatId, "55.92:37.82:3"); //latitude/longitude/utc
                 weatherProperties.setCoordinates("55.92", "37.82");
                 weatherService.setUtc(3);
                 setCity(chatId, KOROLEV);
                 break;
             case MOSCOW:
+                //scheduledService.changePersonCity(chatId, "55.75:37.62:3");
                 weatherProperties.setCoordinates("55.75", "37.62");
                 weatherService.setUtc(3);
                 setCity(chatId, MOSCOW);
                 break;
             case IZHEVSK:
+                //scheduledService.changePersonCity(chatId, "56.85:53.2:4");
                 weatherProperties.setCoordinates("56.85", "53.2");
                 weatherService.setUtc(4);
                 setCity(chatId, IZHEVSK);
@@ -175,8 +182,16 @@ public class UpdateConsumer implements LongPollingSingleThreadUpdateConsumer {
             //List<InlineKeyboardRow> buttons = List.of(new ReplyKeyboardRow(button1));
 
             //InlineKeyboardMarkup markup = new InlineKeyboardMarkup(buttons);
-            ReplyKeyboardMarkup markup = new ReplyKeyboardMarkup(ROWS_MAIN);
-            sendMessage.setReplyMarkup(markup);
+
+            if (isMainChatId(chatId)) {
+                ReplyKeyboardMarkup markup = new ReplyKeyboardMarkup(ROWS_MAIN);
+                sendMessage.setReplyMarkup(markup);
+            } else {
+                ReplyKeyboardMarkup markup = new ReplyKeyboardMarkup(ROWS_MAIN_WITHOUT_INFO);
+                sendMessage.setReplyMarkup(markup);
+            }
+
+
 
             telegramClient.execute(sendMessage);
         } catch (TelegramApiException e) {
@@ -207,7 +222,12 @@ public class UpdateConsumer implements LongPollingSingleThreadUpdateConsumer {
                     .text(message)
                     .chatId(chatId)
                     .build();
-            sendMessage.setReplyMarkup(new ReplyKeyboardMarkup(ROWS_MAIN));
+            if (isMainChatId(chatId)) {
+                sendMessage.setReplyMarkup(new ReplyKeyboardMarkup(ROWS_MAIN));
+            } else {
+                sendMessage.setReplyMarkup(new ReplyKeyboardMarkup(ROWS_MAIN_WITHOUT_INFO));
+            }
+
             telegramClient.execute(sendMessage);
         } catch (TelegramApiException e) {
             e.printStackTrace();
@@ -244,7 +264,7 @@ public class UpdateConsumer implements LongPollingSingleThreadUpdateConsumer {
 
     }
 
-    private boolean checkChatId(Long chatId) {
+    private boolean isMainChatId(Long chatId) {
         return chatId.equals(MAIN_CHAT_ID);
     }
 

@@ -11,6 +11,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 import ru.alekseev.weatherbot.config.BotProperties;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -24,6 +25,9 @@ public class ScheduledService {
 
     @Getter
     private final Set<Long> chats = ConcurrentHashMap.newKeySet();
+
+//    @Getter
+//    private final Map<Long, String> personCity = new ConcurrentHashMap<>();
 
     @Autowired
     public ScheduledService(WeatherService weatherService,
@@ -51,6 +55,7 @@ public class ScheduledService {
             return false;
         } else{
             chats.add(chatId);
+            //personCity.put(chatId, "55.92:37.82");
             return true;
         }
     }
@@ -67,4 +72,8 @@ public class ScheduledService {
         }
 
     }
+
+//    public void changePersonCity(Long chatId, String city) {
+//        personCity.put(chatId, city);
+//    }
 }
